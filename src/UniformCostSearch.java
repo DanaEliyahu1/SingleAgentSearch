@@ -1,12 +1,13 @@
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.PriorityQueue;
+import java.util.TreeSet;
 
 public class UniformCostSearch   extends ASearch
 {
 	// Define lists here ...
 	PriorityQueue<ASearchNode> openlist;
-	HashSet <ASearchNode> closelist;
+	TreeSet <ASearchNode> closelist;
 	@Override
 	public String getSolverName() 
 	{
@@ -29,7 +30,21 @@ public class UniformCostSearch   extends ASearch
 				return (int)(o1.getG()-o2.getG());
 			}
 		});
-		closelist = new HashSet<>();
+		closelist = new TreeSet<>(new Comparator<ASearchNode>() {
+			@Override
+			public int compare(ASearchNode o1, ASearchNode o2) {
+				int[][] state1=((TilePuzzleState)o1._currentProblemState)._tilePuzzle;
+				int[][]state2=((TilePuzzleState)o2._currentProblemState)._tilePuzzle;
+				for (int i = 0; i <state1.length ; i++) {
+					for (int j = 0; j <state1[i].length ; j++) {
+						if(state1[i][j]!=state2[i][j])
+							return state1[i][j]-state2[i][j] ;
+					}
+				}
+				return 0;
+			}
+		});
+
 	}
 
 	@Override
